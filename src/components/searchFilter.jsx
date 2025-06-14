@@ -2,6 +2,11 @@ import { Search, Filter } from 'lucide-react'
 
 
 function SearchFilter({ searchTodo, setSearchTodo, todoStatusFilter, setTodoStatusFilter }) {
+   const handleSearchKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      console.log('Search triggered by Enter key')
+    }
+  }
   return (
     <div className="flex flex-col md:flex-row items-center gap-4 bg-[#1F2937] rounded-xl p-4 mb-6 shadow-sm">
       <Search size={16} />
@@ -11,6 +16,7 @@ function SearchFilter({ searchTodo, setSearchTodo, todoStatusFilter, setTodoStat
         placeholder="Serch your tasks here..."
         value={searchTodo}
         onChange={(e) => setSearchTodo(e.target.value)}
+        onKeyDown={handleSearchKeyDown}
         className="input input-bordered bg-[#1F2937] text-white placeholder:text-gray-400 rounded-lg w-full md:w-2/3"
       />
 

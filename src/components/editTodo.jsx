@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Pencil, X, Loader2 } from 'lucide-react'
 
@@ -24,6 +24,20 @@ function EditTodoModal({ todo, onClose }) {
       onClose()
     }
   })
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose()
+      }
+      if (e.key === 'Enter' && !mutation.isLoading) {
+        mutation.mutate()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [onClose, mutation])
 
   return (
     <div className="modal modal-open" role="dialog" aria-modal="true">

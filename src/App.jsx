@@ -8,7 +8,7 @@ import NotFoundPage from './components/notFoundPage'
 import SearchFilter from './components/searchFilter'
 import ErrorBoundary from './components/errorboundary'
 import TestError from './components/testerror'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router'
 import './index.css'
 
 function Todo() {
@@ -49,19 +49,35 @@ function Todo() {
   )
 }
 
+//Here begins my router configuration. This allows for easier and neater routing in my main App component
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Todo />,
+    errorElement: <NotFoundPage />
+  },
+  {
+    path: "/todos/:id",
+    element: <TodoDetail />,
+    errorElement: <NotFoundPage />
+  },
+  {
+    path: "/error",
+    element: <TestError />
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />
+  }
+])
+
 
 // Rendering my main component with routes and wrapped in my error boundary
 function App() {
   return (
     <ErrorBoundary>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Todo />} />
-          <Route path="/todos/:id" element={<TodoDetail />} />
-          <Route path="*" element={<NotFoundPage />} />
-          <Route path="/error" element={<TestError />} />
-        </Routes>
-      </Router>
+      <RouterProvider router={router} />
     </ErrorBoundary>
   )
 }
