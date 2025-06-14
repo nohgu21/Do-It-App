@@ -7,7 +7,7 @@ import AddTodoModal from './components/todoModal'
 import NotFoundPage from './components/notFoundPage'
 import SearchFilter from './components/searchFilter'
 import ErrorBoundary from './components/errorboundary'
-import TestError from './components/testError'
+// import TestError from './components/testError'
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router'
 import './index.css'
 
@@ -55,16 +55,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Todo />,
-    errorElement: <NotFoundPage />
   },
   {
     path: "/todos/:id",
     element: <TodoDetail />,
-    errorElement: <NotFoundPage />
-  },
-  {
-    path: "/error",
-    element: <TestError />
   },
   {
     path: "*",
