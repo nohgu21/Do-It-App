@@ -1,0 +1,9 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.header {
+  display: block;
+  color: black;
+  font-size: 20px;
+}
