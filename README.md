@@ -205,9 +205,60 @@ This app uses the DummyJSON Todos API:
 
 - Performance Monitoring: Add performance tracking
 - TypeScript: Migrate to TypeScript for better type safety
-- State Management: Consider Redux for complex state needs
 - SEO Optimization: Improve search engine optimization
 - Documentation: Enhanced code documentation
+
+---
+
+# Challenges I Faced Building This Todo App
+
+While building this todo application, I ran into several challenges that taught me valuable lessons about React development. Here are the main issues I encountered and how I worked through them:
+
+1. LocalForage and Data Indexing Issues
+I had trouble setting up LocalForage properly and understanding how data indexing works. The data wasn't being stored or retrieved correctly, which made it hard to persist todos between browser sessions. I had to spend time reading the documentation to understand how LocalForage handles different data types and storage methods. In fact, I wasn't sure it was going to work.
+
+2. Using Variables Before Declaration
+I kept getting "Cannot access variable before initialization" errors because I was trying to use variables (especially React hooks like useMutation) before they were declared in my code. This happened most often when I tried to reference a mutation in a useEffect that was placed above where the mutation was created.
+
+---
+
+3. Pagination Logic Confusion
+I struggled with implementing pagination because I was mixing up page and limit parameters. Even though I was setting these values, my next and previous buttons weren't working. I couldn't figure out why the pagination wasn't moving through the data correctly. It turned out I wasn't properly calculating the total pages or updating the current page state when buttons were clicked.
+
+4. Learning useMutation
+useMutation from React Query was completely new to me. I didn't understand how to properly use it for creating, updating, and deleting todos. I had to learn about mutation functions, how to handle loading states, success callbacks, and error handling. The concept of optimistic updates was also very confusing at first.
+
+---
+
+5. Inline Styling with Tailwind CSS
+Since I was used to writing regular CSS, switching to Tailwind's utility classes was challenging. I often found myself trying to write custom CSS instead of using Tailwind classes. I had to rely on my knowledge of vanilla CSS properties to figure out styling patterns. I also had to go on dribble for colour todo UI options and selected a colour palette.
+
+6. Component Separation Problems
+When I started breaking my code into smaller components, I made mistakes about which parts of the code belonged where. I would copy the wrong pieces of state management or event handlers to the new components, which caused bugs. Learning how to properly pass props and manage state between parent and child components took some time.
+
+---
+
+7. Error Handling
+Implementing proper error handling was tricky. I used my basic knowledge of try-catch blocks from regular JavaScript, but I had to learn how React handles errors differently. I needed to understand error boundaries and how to display user-friendly error messages when API calls failed.
+
+8. Confusing Hooks with Props
+At several points, I mixed up React hooks with props. I would try to destructure hooks like they were props or vice versa. This caused many "hook is not defined" errors. I had to practice understanding the difference between data coming from parent components (props) and data managed within the component (hooks).
+
+---
+
+9. Incorrect Destructuring
+I made many mistakes with destructuring objects and arrays, especially when working with form data and API responses. Sometimes I would destructure properties that didn't exist, or I would destructure them with the wrong names, leading to undefined values.
+
+---
+
+# What Helped Me Overcome These Challenges
+Having a solid foundation in basic JavaScript was crucial for solving these React-specific problems. Concepts like:
+
+- Variable scoping and hoisting
+- Object and array destructuring
+- Async/await and promises
+- Event handling
+- DOM manipulation
 
 ---
 
