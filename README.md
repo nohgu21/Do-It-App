@@ -119,6 +119,8 @@ This app uses the DummyJSON Todos API:
 - Uses React hooks for state management
 - Automatically updates based on current time
 
+see here: ![App Demo](./assets/Dynamic-greeting.png)
+
 ---
 
 ### TodoList.jsx
@@ -128,12 +130,15 @@ This app uses the DummyJSON Todos API:
 - Manages edit and delete operations
 - Implements pagination controls
 
+
 ### TodoDetails.jsx
 
 - Shows detailed view of individual todos
 - Allows adding descriptions to pending tasks
 - Handles task status display
 - Provides navigation back to main list
+
+see here: ![App Demo](./assets/Secondsemesterexamfeature-video-to-gif-converter.gif)
 
 ---
 
