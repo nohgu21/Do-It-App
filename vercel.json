@@ -1,6 +1,6 @@
 {
-  "rewrites": [
-    { "source": "/todos/:id", "destination": "/" },
-    { "source": "/error", "destination": "/" }
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
