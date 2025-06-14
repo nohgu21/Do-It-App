@@ -1,9 +1,6 @@
 {
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html",
-      "statusCode": 200
-    }
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
