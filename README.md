@@ -252,8 +252,7 @@ I made many mistakes with destructuring objects and arrays, especially when work
 ---
 
 # What Helped Me Overcome These Challenges
-Having a solid foundation in basic JavaScript was crucial for solving these React-specific problems. Concepts like:
-
+Doing this entire project, I realised even though React and JS were different, having a foundation in basic JavaScript was crucial for solving these React-specific problems. Concepts like:
 - Variable scoping and hoisting
 - Object and array destructuring
 - Async/await and promises
