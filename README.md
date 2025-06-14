@@ -80,7 +80,7 @@ Core Functionality
 ### Steps
 1.  Clone the Repository
 ```sh
-git clone https://github.com/nohgu21/react-todo-tanstack.git
+git clone https://github.com/nohgu21/second-semester-exams.git
 cd react-todo-tanstack
 ```
 2. Install Dependencies
