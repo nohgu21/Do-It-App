@@ -83,7 +83,7 @@ Core Functionality
 ### Steps
 1.  Clone the Repository
 ```sh
-git clone -b victoria https://github.com/nohgu21/second-semester-exams.git
+git clone -b victoriaTodo https://github.com/nohgu21/second-semester-exams.git
 ```
 2. Install Dependencies
 ```sh
