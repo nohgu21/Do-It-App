@@ -236,16 +236,6 @@ Converting event handlers to TypeScript required learning proper type annotation
 Learning to properly type TanStack Query's useMutation and useQuery hooks with generics was challenging. I had to understand how to specify return types, error types, and variable types for optimal type safety.
 
 ---
-
-# What Helped Me Overcome These Challenges
-Doing this entire project, I realised even though React and JS were different, having a foundation in basic JavaScript was crucial for solving these React-specific problems. Concepts like:
-- Variable scoping and hoisting
-- Object and array destructuring
-- Async/await and promises
-- Event handling
-- DOM manipulation
-
----
 The TypeScript migration added another layer of learning, requiring me to understand type definitions, interfaces, generics, and how to properly annotate React components and hooks for maximum type safety.
 
 Thank You!
