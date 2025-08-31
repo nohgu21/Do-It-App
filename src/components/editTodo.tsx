@@ -1,43 +1,54 @@
-import { useState, useEffect } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Pencil, X, Loader2 } from 'lucide-react'
+import { useState, useEffect } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Pencil, X, Loader2 } from 'lucide-react';
+import type { Todo, EditTodoModalProps, TodoResponse } from '../types/todo';
 
-function EditTodoModal({ todo, onClose }) {
-  const [editedTodo, setEditedTodo] = useState(todo.todo)
-  const queryClient = useQueryClient()
+const EditTodoModal: React.FC<EditTodoModalProps> = ({ todo, onClose }) => {
+  const [editedTodo, setEditedTodo] = useState<string>(todo.todo);
+  const queryClient = useQueryClient();
 
-  const mutation = useMutation({
-    mutationFn: async () => {
+  const mutation = useMutation<TodoResponse, Error, void>({
+    mutationFn: async (): Promise<TodoResponse> => {
       const res = await fetch(`https://dummyjson.com/todos/${todo.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ todo: editedTodo })
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.message || 'Failed to update')
-      return data
+      });
+      const data: TodoResponse = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to update');
+      return data;
     },
-    onSuccess: (data) => {
-      queryClient.setQueryData(['todos'], (old) =>
-        old.map((t) => (t.id === data.id ? { ...t, todo: data.todo } : t))
-      )
-      onClose()
+    onSuccess: (data: TodoResponse) => {
+      queryClient.setQueryData<Todo[]>(['todos'], (old) =>
+        old ? old.map((t) => (t.id === data.id ? { ...t, todo: data.todo } : t)) : []
+      );
+      onClose();
     }
-  })
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setEditedTodo(e.target.value);
+  };
+
+  const handleUpdate = (): void => {
+    if (editedTodo.trim()) {
+      mutation.mutate();
+    }
+  };
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent): void => {
       if (e.key === 'Escape') {
-        onClose()
+        onClose();
       }
-      if (e.key === 'Enter' && !mutation.isLoading) {
-        mutation.mutate()
+      if (e.key === 'Enter' && !mutation.isPending) {
+        handleUpdate();
       }
-    }
+    };
 
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [onClose, mutation])
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onClose, mutation.isPending]);
 
   return (
     <div className="modal modal-open" role="dialog" aria-modal="true">
@@ -57,7 +68,7 @@ function EditTodoModal({ todo, onClose }) {
         <input
           type="text"
           value={editedTodo}
-          onChange={(e) => setEditedTodo(e.target.value)}
+          onChange={handleInputChange}
           className="input input-bordered w-full mb-4 bg-[#0F4C5C] text-white border-none placeholder-gray-300"
           aria-label="Edit todo title"
         />
@@ -72,11 +83,11 @@ function EditTodoModal({ todo, onClose }) {
           </button>
           <button
             className="btn border border-[#0F4C5C] text-[#0F4C5C] bg-white hover:bg-[#0F4C5C] hover:text-white rounded-xl transition"
-            disabled={mutation.isLoading}
-            onClick={() => mutation.mutate()}
+            disabled={mutation.isPending}
+            onClick={handleUpdate}
             aria-label="Update todo"
           >
-            {mutation.isLoading ? (
+            {mutation.isPending ? (
               <>
                 <Loader2 className="animate-spin" size={16} />
                 Updating...
@@ -88,7 +99,7 @@ function EditTodoModal({ todo, onClose }) {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default EditTodoModal
+export default EditTodoModal;

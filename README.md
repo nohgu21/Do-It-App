@@ -1,10 +1,9 @@
 # Second-Semester-Exams
-This contains my Second Semester Exam Project for the Tinyuka 2024 Cohort
+This contains the TypeScript version of my Second Semester Exam Project for the Tinyuka 2024 Cohort
 
 # Do-It App - A React Todo App with TanStack Query, TailwindCSS & DaisyUI
 
-A sleek, single-page Todo application built with **React**, **TanStack Query**, **TailwindCSS**, and **DaisyUI**. 
-DO-It App is a comprehensive task management application that allows users to create, read, update, and delete tasks. The application provides a seamless user experience with features like search functionality, status filtering, pagination, and detailed task views. Built with modern React patterns and best practices, the app demonstrates proficiency in state management, API integration, and responsive design.
+A sleek, single-page Todo application built with React, TypeScript, TanStack Query, TailwindCSS, and DaisyUI. DO-It App is a comprehensive task management application that allows users to create, read, update, and delete tasks. The application provides a seamless user experience with features like search functionality, status filtering, pagination, and detailed task views. Built with modern React patterns, TypeScript best practices, and demonstrates proficiency in type-safe state management, API integration, and responsive design.
 
 ---
 
@@ -42,6 +41,7 @@ Core Functionality
 ### Frontend Framework
 
 - React 18: Modern React with hooks and functional components
+- TypeScript: Full type safety and enhanced developer experience
 - React Router DOM: Client-side routing for navigation
 - React Query (TanStack Query): Server state management and caching
 
@@ -62,6 +62,8 @@ Core Functionality
 
 ## Resource links
 - [React](https://reactjs.org/)
+- [Typescript Documentation](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
+- [Typescript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/)
 - [TanStack Query](https://tanstack.com/query/latest)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [DaisyUI](https://daisyui.com/)
@@ -76,12 +78,12 @@ Core Functionality
 - Node.js (version 14 or higher)
 - npm or yarn package manager
 - Modern web browser
+- Basic understanding of TypeScript
 
 ### Steps
 1.  Clone the Repository
 ```sh
-git clone https://github.com/nohgu21/second-semester-exams.git
-cd react-todo-tanstack
+git clone -b victoria https://github.com/nohgu21/second-semester-exams.git
 ```
 2. Install Dependencies
 ```sh
@@ -216,43 +218,22 @@ see here: ![App Demo](./assets/Secondsemesterexamfeature-video-to-gif-converter.
 ---
 
 # Challenges I Faced Building This Todo App
+## TypeScript Migration Challenges
+Converting this React todo app from JavaScript to TypeScript presented several unique challenges that taught me valuable lessons about type-safe development:
 
-While building this todo application, I ran into several challenges that taught me valuable lessons about React development. Here are the main issues I encountered and how I worked through them:
+1. Property Type Errors: 
+During the conversion, I encountered errors like "Property 'message' does not exist on type 'TodoResponse'" when trying to access error messages from API responses. I learned that TypeScript requires explicit type definitions for all object properties, even optional ones used in error handling.
 
-1. LocalForage and Data Indexing Issues: 
-I had trouble setting up LocalForage properly and understanding how data indexing works. The data wasn't being stored or retrieved correctly, which made it hard to persist todos between browser sessions. I had to spend time reading the documentation to understand how LocalForage handles different data types and storage methods. In fact, I wasn't sure it was going to work.
-
-2. Using Variables Before Declaration: 
-I kept getting "Cannot access variable before initialization" errors because I was trying to use variables (especially React hooks like useMutation) before they were declared in my code. This happened most often when I tried to reference a mutation in a useEffect that was placed above where the mutation was created.
-
----
-
-3. Pagination Logic Confusion: 
-I struggled with implementing pagination because I was mixing up page and limit parameters. Even though I was setting these values, my next and previous buttons weren't working. I couldn't figure out why the pagination wasn't moving through the data correctly. It turned out I wasn't properly calculating the total pages or updating the current page state when buttons were clicked.
-
-4. Learning useMutation: 
-useMutation from React Query was completely new to me. I didn't understand how to properly use it for creating, updating, and deleting todos. I had to learn about mutation functions, how to handle loading states, success callbacks, and error handling. The concept of optimistic updates was also very confusing at first.
+2. React Router Type Constraints: 
+The useParams hook required specific type constraints that weren't immediately obvious. I discovered that React Router expects parameter types to extend Record<string, string | undefined> rather than simple interfaces, leading to type constraint violations.
 
 ---
 
-5. Inline Styling with Tailwind CSS: 
-Since I was used to writing regular CSS, switching to Tailwind's utility classes was challenging. I often found myself trying to write custom CSS instead of using Tailwind classes. I had to rely on my knowledge of vanilla CSS properties to figure out styling patterns. I also had to go on dribble for colour todo UI options and selected a colour palette.
+3. Event Handler Typing: 
+Converting event handlers to TypeScript required learning proper type annotations for React events. I had to understand the difference between React.ChangeEvent<HTMLInputElement> and basic Event types.
 
-6. Component Separation Problems: 
-When I started breaking my code into smaller components, I made mistakes about which parts of the code belonged where. I would copy the wrong pieces of state management or event handlers to the new components, which caused bugs. Learning how to properly pass props and manage state between parent and child components took some time.
-
----
-
-7. Error Handling: 
-Implementing proper error handling was tricky. I used my basic knowledge of try-catch blocks from regular JavaScript, but I had to learn how React handles errors differently. I needed to understand error boundaries and how to display user-friendly error messages when API calls failed.
-
-8. Confusing Hooks with Props: 
-At several points, I mixed up React hooks with props. I would try to destructure hooks like they were props or vice versa. This caused many "hook is not defined" errors. I had to practice understanding the difference between data coming from parent components (props) and data managed within the component (hooks).
-
----
-
-9. Incorrect Destructuring: 
-I made many mistakes with destructuring objects and arrays, especially when working with form data and API responses. Sometimes I would destructure properties that didn't exist, or I would destructure them with the wrong names, leading to undefined values.
+4. Mutation and Query Generics: 
+Learning to properly type TanStack Query's useMutation and useQuery hooks with generics was challenging. I had to understand how to specify return types, error types, and variable types for optimal type safety.
 
 ---
 
@@ -265,5 +246,6 @@ Doing this entire project, I realised even though React and JS were different, h
 - DOM manipulation
 
 ---
+The TypeScript migration added another layer of learning, requiring me to understand type definitions, interfaces, generics, and how to properly annotate React components and hooks for maximum type safety.
 
 Thank You!

@@ -1,51 +1,66 @@
-import { useParams, useNavigate } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import type { Todo } from '../types/todo';
 
-async function fetchTodoDetails(id) {
-  const response = await fetch(`https://dummyjson.com/todos/${id}`)
-  if (!response.ok) throw new Error('Failed to fetch details to this task')
 
-  return response.json()
+async function fetchTodoDetails(id: string): Promise<Todo> {
+  const response = await fetch(`https://dummyjson.com/todos/${id}`);
+  if (!response.ok) throw new Error('Failed to fetch details to this task');
+
+  return response.json();
 }
 
-function TodoDetail() {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const [description, setDescription] = useState('')
+const TodoDetail: React.FC = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [description, setDescription] = useState<string>('');
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery<Todo, Error>({
     queryKey: ['todo', id],
-    queryFn: () => fetchTodoDetails(id),
-  })
+    queryFn: () => {
+      if (!id) throw new Error('Todo ID is required');
+      return fetchTodoDetails(id);
+    },
+    enabled: !!id, // Only run query if id exists
+  });
 
-  if (isLoading) return <p className='text-center text-white mt-8'>Loading...</p>
-  if (error) return <p className='text-center text-red-500 mt-8'>Error: {error.message}</p>
+  const handleAddTask = (): void => {
+    if (!description.trim()) {
+      alert('Please enter a task description.');
+      return;
+    }
 
-  
+    if (!data) return;
 
-function handleAddTask() {
-  if (!description.trim()) {
-    alert('Please enter a task description.')
-    return
-  }
+    console.log('New Task Added:', {
+      title: data.todo,
+      status: data.completed ? 'Completed' : 'Pending',
+      description,
+    });
 
-  console.log('New Task Added:', {
-    title: data.todo,
-    status: data.completed ? 'Completed' : 'Pending',
-    description,
-  })
+    alert('Task added! (Check console for now)');
+    setDescription('');
+  };
 
-  alert('Task added! (Check console for now)')
-  setDescription('')
-}
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setDescription(e.target.value);
+  };
+
+  const handleGoBack = (): void => {
+    navigate('/');
+  };
+
+  if (isLoading) return <p className='text-center text-white mt-8'>Loading...</p>;
+  if (error) return <p className='text-center text-red-500 mt-8'>Error: {error.message}</p>;
+  if (!data) return <p className='text-center text-white mt-8'>Todo not found.</p>;
 
   return (
     <main className='font-lato min-h-screen bg-[#0F4C5C] flex items-center justify-center px-4 py-10'>
       <div className='w-full max-w-md bg-white text-[#0F4C5C] p-6 rounded-2xl shadow-xl space-y-6'>
 
         <button
-          onClick={() => navigate('/')}
+          onClick={handleGoBack}
           className='btn btn-sm bg-white border border-[#0F4C5C] text-[#0F4C5C] font-semibold hover:bg-[#0f4c5c] hover:text-white transition-all'
         >
           View complete list
@@ -68,7 +83,6 @@ function handleAddTask() {
         </div>
 
         <div className='space-y-1'>
-          
           {data.completed ? (
             <h3 className="bg-green-600 text-white text-center py-3 rounded-lg font-semibold text-lg shadow-md">
               Yipee 🎉 Task completed!
@@ -80,7 +94,7 @@ function handleAddTask() {
               <input
                 type='text'
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={handleDescriptionChange}
                 placeholder='Briefly describe your task...'
                 className='input input-bordered w-full bg-[#1F2937] text-white placeholder:text-gray-400'
               />
@@ -96,7 +110,7 @@ function handleAddTask() {
         </div>
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default TodoDetail
+export default TodoDetail;

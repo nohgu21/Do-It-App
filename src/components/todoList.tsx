@@ -1,48 +1,51 @@
+import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
+import { fetchCachedTodos } from '../utils/fetchTodos';
+import EditTodoModal from './editTodo';
+import { ChevronLeft, ChevronRight, Pencil, Trash2 } from 'lucide-react';
+import type { Todo, MyTodoListProps } from '../types/todo';
 
-import { useState, useEffect } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
-import { fetchCachedTodos } from '../utils/fetchTodos'
-import EditTodoModal from './editTodo'
-import { ChevronLeft, ChevronRight, Pencil, Trash2 } from 'lucide-react'
+const MyTodoList: React.FC<MyTodoListProps> = ({ 
+  searchTodo, 
+  todoStatusFilter, 
+  currentPage, 
+  setCurrentPage 
+}) => {
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const queryClient = useQueryClient();
+  const limit = 10;
+  const skip = (currentPage - 1) * limit;
 
-
-function MyTodoList ({ searchTodo, todoStatusFilter, currentPage, setCurrentPage }) {
-  const [selectedTodo, setSelectedTodo] = useState(null)
-  const queryClient = useQueryClient()
-  const limit = 10
-  const skip = (currentPage - 1) * limit
-
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery<Todo[], Error>({
     queryKey: ['todos'],
     queryFn: () => fetchCachedTodos()
-  })
+  });
 
-  const deleteMutation = useMutation({
-    mutationFn: async (id) => {
+  const deleteMutation = useMutation<number, Error, number>({
+    mutationFn: async (id: number): Promise<number> => {
       const res = await fetch(`https://dummyjson.com/todos/${id}`, {
         method: 'DELETE',
-      })
-      if (!res.ok) throw new Error('Failed to delete')
-      return id
+      });
+      if (!res.ok) throw new Error('Failed to delete');
+      return id;
     },
-    onSuccess: (id) => {
-      queryClient.setQueryData(['todos'], (old) =>
-        old.filter((todo) => todo.id !== id)
-      )
+    onSuccess: (id: number) => {
+      queryClient.setQueryData<Todo[]>(['todos'], (old) =>
+        old ? old.filter((todo) => todo.id !== id) : []
+      );
     },
-  })
+  });
 
-  console.log("Fetched Data:", data)
+  console.log("Fetched Data:", data);
 
   useEffect(() => {
-    setCurrentPage(1)
-  }, [searchTodo, todoStatusFilter])
+    setCurrentPage(1);
+  }, [searchTodo, todoStatusFilter, setCurrentPage]);
 
-
-  if (isLoading) return <p className="text-white text-center mt-8" role="status" aria-live="polite">Loading...</p>
-  if (error) return <p className="text-red-500 text-center mt-8">Error: {error.message}</p>
-  if (!data || !Array.isArray(data)) return <p className="text-white text-center mt-8">No tasks found.</p>
+  if (isLoading) return <p className="text-white text-center mt-8" role="status" aria-live="polite">Loading...</p>;
+  if (error) return <p className="text-red-500 text-center mt-8">Error: {error.message}</p>;
+  if (!data || !Array.isArray(data)) return <p className="text-white text-center mt-8">No tasks found.</p>;
 
   const filteredTodos = data.filter(
     (todo) =>
@@ -50,14 +53,25 @@ function MyTodoList ({ searchTodo, todoStatusFilter, currentPage, setCurrentPage
       (todoStatusFilter === "all" ||
         (todoStatusFilter === "completed" && todo.completed) ||
         (todoStatusFilter === "pending" && !todo.completed))
-  )
+  );
 
-  const totalPages = Math.ceil(filteredTodos.length / limit)
-  const start = skip
-  const end = start + limit
-  const paginatedTodos = filteredTodos.slice(start, end)
+  const totalPages = Math.ceil(filteredTodos.length / limit);
+  const start = skip;
+  const end = start + limit;
+  const paginatedTodos = filteredTodos.slice(start, end);
 
-  
+  const handleDeleteClick = (todoId: number): void => {
+    const confirmDelete = window.confirm('Hmm... Are you sure you want to delete this task?');
+    if (confirmDelete) deleteMutation.mutate(todoId);
+  };
+
+  const handleEditClick = (todo: Todo): void => {
+    setSelectedTodo(todo);
+  };
+
+  const handleCloseModal = (): void => {
+    setSelectedTodo(null);
+  };
 
   return (
     <main className="bg-[#1F2937] mt-4 rounded-xl p-4 space-y-6 shadow-lg text-white" aria-label="Todo list section">
@@ -82,16 +96,13 @@ function MyTodoList ({ searchTodo, todoStatusFilter, currentPage, setCurrentPage
               <button
                 className="btn btn-xs bg-[#0F4C5C] text-white hover:bg-[#0a3742]"
                 aria-label="Edit"
-                onClick={() => setSelectedTodo(todo)}
+                onClick={() => handleEditClick(todo)}
               >
                 <Pencil size={16} />
               </button>
 
               <button
-                onClick={() => {
-                  const confirmDelete = window.confirm('Hmm... Are you sure you want to delete this task?')
-                  if (confirmDelete) deleteMutation.mutate(todo.id)
-                }}
+                onClick={() => handleDeleteClick(todo.id)}
                 className="btn btn-xs bg-[#1F2937] text-red-500 border border-red-500 hover:bg-[#0a0e14]"
                 aria-label="Delete"
               >
@@ -124,15 +135,13 @@ function MyTodoList ({ searchTodo, todoStatusFilter, currentPage, setCurrentPage
         >
           Next <ChevronRight size={16} />
         </button>
-
       </nav>
+
       {selectedTodo && (
-          <EditTodoModal todo={selectedTodo} onClose={() => setSelectedTodo(null)} />
-        )}
-      
+        <EditTodoModal todo={selectedTodo} onClose={handleCloseModal} />
+      )}
     </main>
+  );
+};
 
-  )
-}
-
-export default MyTodoList
+export default MyTodoList;

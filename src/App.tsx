@@ -1,21 +1,21 @@
-// importing all my components to parent folder from child folder as well as my router
-import { useState } from 'react'
-import Greeting from './components/greeting'
-import TodoDetail from './components/todoDetails'
-import MyTodoList from './components/todoList'
-import AddTodoModal from './components/todoModal'
-import NotFoundPage from './components/notFoundPage'
-import SearchFilter from './components/searchFilter'
-import ErrorBoundary from './components/errorboundary'
-// import TestError from './components/testError'
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router'
-import './index.css'
+// App.tsx
+import { useState } from 'react';
+import Greeting from './components/greeting';
+import TodoDetail from './components/todoDetails';
+import MyTodoList from './components/todoList';
+import AddTodoModal from './components/todoModal';
+import NotFoundPage from './components/notFoundPage';
+import SearchFilter from './components/searchFilter';
+import ErrorBoundary from './components/errorboundary';
+import { createBrowserRouter, RouterProvider } from 'react-router';
+import type { TodoStatusFilter } from './types/todo';
+import './index.css';
 
-function Todo() {
-  const [modalOpen, setModalOpen] = useState(false)
-  const [searchTodo, setSearchTodo] = useState("")
-  const [todoStatusFilter, setTodoStatusFilter] = useState("all")
-  const [currentPage, setCurrentPage] = useState(1)
+const Todo: React.FC = () => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [searchTodo, setSearchTodo] = useState<string>("");
+  const [todoStatusFilter, setTodoStatusFilter] = useState<TodoStatusFilter>("all");
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   return (
     <main className="font-lato min-h-screen bg-[#0F4C5C] text-white px-4 py-8 flex items-center justify-center">
@@ -46,11 +46,10 @@ function Todo() {
         />
       </div>
     </main>
-  )
-}
+  );
+};
 
-//Here begins my router configuration. This allows for easier and neater routing in my main App component
-
+// Here begins my router configuration. This allows for easier and neater routing in my main App component
 const router = createBrowserRouter([
   {
     path: "/",
@@ -64,16 +63,15 @@ const router = createBrowserRouter([
     path: "*",
     element: <NotFoundPage />
   }
-])
-
+]);
 
 // Rendering my main component with routes and wrapped in my error boundary
-function App() {
+const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <RouterProvider router={router} />
     </ErrorBoundary>
-  )
-}
+  );
+};
 
-export default App
+export default App;
