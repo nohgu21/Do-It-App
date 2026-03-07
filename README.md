@@ -1,6 +1,3 @@
-# Second-Semester-Exams
-This contains my Second Semester Exam Project for the Tinyuka 2024 Cohort
-
 # Do-It App - A React Todo App with TanStack Query, TailwindCSS & DaisyUI
 
 A sleek, single-page Todo application built with **React**, **TanStack Query**, **TailwindCSS**, and **DaisyUI**. 
